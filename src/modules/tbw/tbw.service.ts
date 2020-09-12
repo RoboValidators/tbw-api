@@ -33,4 +33,6 @@ export default class TbwService {
 
     return payoutPerWallet;
   }
+
+  async processPayouts(from: number, to: number) {}
 }
