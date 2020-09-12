@@ -19,6 +19,7 @@ const cache = setupCache({
       inject: [ConfigService]
     })
   ],
-  providers: [ApiService]
+  providers: [ApiService],
+  exports: [ApiService]
 })
 export class ApiModule {}

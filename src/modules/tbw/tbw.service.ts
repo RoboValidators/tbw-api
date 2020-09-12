@@ -1,6 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import BigNumber from "bignumber.js";
-import { Rewards } from "src/types";
+
+import { Rewards } from "../../types";
 
 import TrueBlockWeightModel from "./tbw.entity";
 import TbwRepository from "./tbw.repository";
