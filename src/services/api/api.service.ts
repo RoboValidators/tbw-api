@@ -4,12 +4,7 @@ import { Observable } from "rxjs";
 import { AxiosResponse } from "axios";
 import { ConfigService } from "@nestjs/config";
 
-import {
-  BlockResponse,
-  WalletResponse,
-  BlocksResponse,
-  VoteTransactionResponse
-} from "../../types/api";
+import { Api } from "@types";
 
 @Injectable()
 export class ApiService {
@@ -19,26 +14,26 @@ export class ApiService {
     this.validator = this.configService.get<string>("VALIDATOR_NAME");
   }
 
-  async findWallet(addressOrName = this.validator): Promise<WalletResponse> {
+  async findWallet(addressOrName = this.validator): Promise<Api.WalletResponse> {
     const result = this.httpService.get(`/wallets/${addressOrName}`, {
       cache: {
         maxAge: 15 * 60 * 1000 // 15 minutes
       }
     });
 
-    return this.extractData<WalletResponse>(result);
+    return this.extractData<Api.WalletResponse>(result);
   }
 
-  async findLastBlock(): Promise<BlockResponse> {
+  async findLastBlock(): Promise<Api.BlockResponse> {
     const result = this.httpService.get("/blocks/last");
-    return this.extractData<BlockResponse>(result);
+    return this.extractData<Api.BlockResponse>(result);
   }
 
   async findAllBlocksByValidator(
     from: number,
     to: number,
     validator = this.validator
-  ): Promise<BlocksResponse> {
+  ): Promise<Api.BlocksResponse> {
     const wallet = await this.findWallet(validator);
 
     if (!to) {
@@ -53,14 +48,14 @@ export class ApiService {
       }
     });
 
-    return this.extractData<BlocksResponse>(result);
+    return this.extractData<Api.BlocksResponse>(result);
   }
 
   async findVoteAge(addressOrName: string): Promise<any> {
     const wallet = await this.findWallet(this.validator);
 
     const result = this.httpService.get(`wallets/${addressOrName}/transactions?typeGroup=1&type=3`);
-    const extractedResult = await this.extractData<VoteTransactionResponse>(result);
+    const extractedResult = await this.extractData<Api.VoteTransactionResponse>(result);
 
     const lastVoteTx = extractedResult.data[0];
 

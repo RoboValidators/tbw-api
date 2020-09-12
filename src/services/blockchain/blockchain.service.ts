@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-import { ApiService } from "../api/api.service";
-import { BlockDTO } from "../../types/blockchain";
+import { ApiService } from "@services/api/api.service";
+import { Blockchain } from "@types";
 
 @Injectable()
 export class BlockchainService {
@@ -10,7 +10,7 @@ export class BlockchainService {
 
   constructor(private apiService: ApiService, private configService: ConfigService) {}
 
-  findAllBlocksByValidator(): BlockDTO {
+  findAllBlocksByValidator(): Blockchain.BlockDTO {
     return [] as any;
   }
 }

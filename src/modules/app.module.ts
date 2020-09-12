@@ -2,8 +2,8 @@ import { Module } from "@nestjs/common";
 import { TerminusModule } from "@nestjs/terminus";
 import { ConfigModule } from "@nestjs/config";
 
-import HealthController from "./health/health.controller";
-import TbwModule from "./tbw/tbw.module";
+import TbwModule from "@modules/tbw/tbw.module";
+import HealthController from "@modules/health/health.controller";
 
 @Module({
   imports: [

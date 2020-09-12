@@ -1,6 +1,6 @@
 import { Module, Global } from "@nestjs/common";
 
-import { ApiModule } from "../api/api.module";
+import { ApiModule } from "@services/api/api.module";
 
 @Global()
 @Module({

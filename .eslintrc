@@ -33,6 +33,12 @@
         "groups": [["external", "builtin"], "internal", ["sibling", "parent"]],
         "newlines-between": "always-and-inside-groups"
       }
+    ],
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": ["@"]
+      }
     ]
   }
 }

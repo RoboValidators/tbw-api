@@ -4,7 +4,7 @@ import "firebase/firestore";
 import * as fireorm from "fireorm";
 import admin, { ServiceAccount } from "firebase-admin";
 
-import { AppModule } from "./modules/app.module";
+import { AppModule } from "@modules/app.module";
 
 import serviceAccount = require("./config/serviceAccountKey.json");
 
