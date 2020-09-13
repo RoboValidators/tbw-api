@@ -6,6 +6,7 @@ import { AuthGuard } from "@guards/auth.guard";
 
 import TbwService from "./tbw.service";
 import TrueBlockWeight from "./tbw.entity";
+import TrueBlockWeightDTO from "./dto/TrueBlockWeightDTO";
 
 @Controller("tbw")
 export default class TbwController {
@@ -23,7 +24,7 @@ export default class TbwController {
   }
 
   @Get("dry")
-  async dryRun(@Query("from") f?: string, @Query("to") t?: string): Promise<Rewards> {
+  async dryRun(@Query("from") f?: string, @Query("to") t?: string): Promise<TrueBlockWeightDTO> {
     const from = f ? parseInt(f) : 0;
     const to = t ? parseInt(t) : Number.MAX_SAFE_INTEGER;
 
@@ -32,7 +33,7 @@ export default class TbwController {
 
   @Get("process")
   @UseGuards(AuthGuard)
-  async process(@Query("from") f?: string, @Query("to") t?: string): Promise<Rewards> {
+  async process(@Query("from") f?: string, @Query("to") t?: string): Promise<TrueBlockWeightDTO> {
     const from = f ? parseInt(f) : 0;
     const to = t ? parseInt(t) : Number.MAX_SAFE_INTEGER;
 

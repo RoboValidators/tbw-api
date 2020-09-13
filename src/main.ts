@@ -7,7 +7,7 @@ import * as fireorm from "fireorm";
 import admin, { ServiceAccount } from "firebase-admin";
 
 import { AppModule } from "@modules/app.module";
-import { INetworkConfig } from "@types";
+import { INetworkConfig, Api } from "@types";
 import { NetworkConfig } from "@config";
 
 import * as serviceAccount from "./config/serviceAccountKey.json";
@@ -28,8 +28,16 @@ async function bootstrap() {
   const networkConfig: INetworkConfig = await NetworkConfig.get();
   Managers.configManager.setConfig(networkConfig);
 
-  const { data } = await axios.get(`${networkConfig.config.relayUrl}/blockchain`);
-  Managers.configManager.setHeight(data.data.block.height);
+  // Set block height
+  const { data: heightData } = await axios.get(`${networkConfig.config.relayUrl}/blockchain`);
+  Managers.configManager.setHeight(heightData.data.block.height);
+
+  // Set fees
+  const { data: feeData } = await axios.get<Api.ConfigResponse>(
+    `${networkConfig.config.relayUrl}/node/configuration`
+  );
+  const staticFees = feeData.data.constants.fees.staticFees;
+  NetworkConfig.setFees(staticFees);
 
   // Server settings
   app.enableCors();

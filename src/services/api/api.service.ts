@@ -5,6 +5,7 @@ import { AxiosResponse } from "axios";
 import { ConfigService } from "@nestjs/config";
 
 import { Api } from "@types";
+import { ITransactionData } from "@arkecosystem/crypto/dist/interfaces";
 
 @Injectable()
 export class ApiService {
@@ -14,7 +15,7 @@ export class ApiService {
     this.validator = this.configService.get<string>("VALIDATOR_NAME");
   }
 
-  async findWallet(addressOrName = this.validator): Promise<Api.WalletResponse> {
+  async findWalletCached(addressOrName = this.validator): Promise<Api.WalletResponse> {
     const result = this.httpService.get(`/wallets/${addressOrName}`, {
       cache: {
         maxAge: 15 * 60 * 1000 // 15 minutes
@@ -22,6 +23,28 @@ export class ApiService {
     });
 
     return this.extractData<Api.WalletResponse>(result);
+  }
+
+  async findWallet(addressOrName = this.validator): Promise<Api.WalletResponse> {
+    const result = this.httpService.get(`/wallets/${addressOrName}`);
+    return this.extractData<Api.WalletResponse>(result);
+  }
+
+  async findNonce(addressOrName = this.validator): Promise<string> {
+    const result = await this.findWallet(addressOrName);
+    return result.data.nonce;
+  }
+
+  async broadcast(tx: ITransactionData): Promise<any> {
+    const result = this.httpService.post("/transactions", {
+      transactions: [tx]
+    });
+
+    console.log("begin");
+    console.log(JSON.stringify(result, null, 4));
+    console.log("end");
+
+    return result;
   }
 
   async findLastBlock(): Promise<Api.BlockResponse> {
