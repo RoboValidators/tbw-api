@@ -5,6 +5,7 @@ import { Transactions } from "@arkecosystem/crypto";
 import { ApiService } from "@services/api/api.service";
 import TrueBlockWeightDTO from "@modules/tbw/dto/TrueBlockWeightDTO";
 import { NetworkConfig } from "@config";
+import BigNumber from "bignumber.js";
 
 @Injectable()
 export class BlockchainService {
@@ -12,23 +13,24 @@ export class BlockchainService {
 
   constructor(private apiService: ApiService, private configService: ConfigService) {}
 
-  async processPayout(tbw: TrueBlockWeightDTO): Promise<any> {
+  async processPayout(tbw: TrueBlockWeightDTO): Promise<void> {
     const networkConfig = await NetworkConfig.get();
     const { staticFees } = NetworkConfig.getFees();
 
     const passphrase = this.configService.get<string>("MNEMONIC");
     const secondPassphrase = this.configService.get<string | undefined>("SECOND_MNEMONIC");
 
-    const nonce = await this.apiService.findNonce();
+    const nextNonce = await this.apiService.findNextNonce();
 
     const multiPayment = Transactions.BuilderFactory.multiPayment()
       .network(networkConfig.network.pubKeyHash)
       .version(2)
-      .nonce(nonce)
+      .nonce(nextNonce)
       .fee(staticFees.multiPayment.toString());
 
     for (const recipient of Object.keys(tbw.rewards)) {
-      multiPayment.addPayment(recipient, tbw.rewards[recipient]);
+      const amount = new BigNumber(tbw.rewards[recipient]).times(1e8).toFixed(0);
+      multiPayment.addPayment(recipient, amount);
     }
 
     multiPayment.sign(passphrase);
@@ -38,8 +40,6 @@ export class BlockchainService {
     }
 
     const tx = multiPayment.getStruct();
-    const txResult = await this.apiService.broadcast(tx);
-
-    return [] as any;
+    await this.apiService.broadcast(tx);
   }
 }

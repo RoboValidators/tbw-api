@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 
 import { AxiosResponse } from "axios";
@@ -30,21 +30,17 @@ export class ApiService {
     return this.extractData<Api.WalletResponse>(result);
   }
 
-  async findNonce(addressOrName = this.validator): Promise<string> {
+  async findNextNonce(addressOrName = this.validator): Promise<string> {
     const result = await this.findWallet(addressOrName);
-    return result.data.nonce;
+    return (parseInt(result.data.nonce) + 1).toString();
   }
 
-  async broadcast(tx: ITransactionData): Promise<any> {
+  async broadcast(tx: ITransactionData): Promise<void> {
     const result = this.httpService.post("/transactions", {
       transactions: [tx]
     });
 
-    console.log("begin");
-    console.log(JSON.stringify(result, null, 4));
-    console.log("end");
-
-    return result;
+    await this.extractData(result);
   }
 
   async findLastBlock(): Promise<Api.BlockResponse> {
@@ -100,6 +96,12 @@ export class ApiService {
 
   async extractData<T>(request: Observable<AxiosResponse<T>>): Promise<T> {
     const resolvedRequest = await request.toPromise();
+
+    const errors = (resolvedRequest.data as any)?.errors;
+    if (errors) {
+      throw new BadRequestException(errors);
+    }
+
     return resolvedRequest.data;
   }
 }

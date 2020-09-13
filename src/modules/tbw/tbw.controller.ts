@@ -37,6 +37,6 @@ export default class TbwController {
     const from = f ? parseInt(f) : 0;
     const to = t ? parseInt(t) : Number.MAX_SAFE_INTEGER;
 
-    return this.tbwService.calculatePayouts(from, to);
+    return this.tbwService.processPayouts(from, to);
   }
 }

@@ -4,6 +4,8 @@ import { uniqBy } from "lodash";
 
 import { Rewards } from "@types";
 
+import { BlockchainService } from "@services/blockchain/blockchain.service";
+
 import TbwRepository from "./tbw.repository";
 import TrueBlockWeightDTO from "./dto/TrueBlockWeightDTO";
 import TrueBlockWeight from "./tbw.entity";
@@ -12,7 +14,10 @@ import TrueBlockWeight from "./tbw.entity";
 export default class TbwService {
   private readonly logger = new Logger(TbwService.name);
 
-  constructor(private readonly tbwRepository: TbwRepository) {}
+  constructor(
+    private readonly bcService: BlockchainService,
+    private readonly tbwRepository: TbwRepository
+  ) {}
 
   async findBetweenBlocks(from: number, to: number): Promise<TrueBlockWeight[]> {
     return this.tbwRepository.findBetweenBlocks(from, to);
@@ -34,7 +39,7 @@ export default class TbwService {
 
       tbw.voters.forEach((voter) => {
         const previousReward = new BigNumber(acc[voter.wallet] || 0);
-        acc = { ...acc, [voter.wallet]: previousReward.plus(voter.reward).toString() };
+        acc = { ...acc, [voter.wallet]: previousReward.plus(voter.reward).toFixed(8) };
 
         totalVotersRewards = totalVotersRewards.plus(voter.reward);
       });
@@ -49,18 +54,23 @@ export default class TbwService {
     totalTbw.fromBlock = from;
     totalTbw.toBlock = to;
     totalTbw.rewards = payoutPerWallet;
-    totalTbw.licenseFee = totalLicenseFee.toString();
-    totalTbw.validatorFee = totalValidatorFee.toString();
-    totalTbw.blockReward = totalBlockRewards.toString();
+    totalTbw.licenseFee = totalLicenseFee.toFixed(8);
+    totalTbw.validatorFee = totalValidatorFee.toFixed(8);
+    totalTbw.blockReward = totalBlockRewards.toFixed(8);
     totalTbw.votersReward = totalVotersRewards
       .minus(totalValidatorFee)
       .minus(totalLicenseFee)
-      .toString();
+      .toFixed(8);
 
     return totalTbw;
   }
 
-  async processPayouts(from: number, to: number) {
-    const payouts = await this.calculatePayouts(from, to);
+  async processPayouts(from: number, to: number): Promise<TrueBlockWeightDTO> {
+    const tbw = await this.calculatePayouts(from, to);
+    const result = await this.bcService.processPayout(tbw);
+
+    console.log(result);
+
+    return tbw;
   }
 }
