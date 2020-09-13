@@ -1,7 +1,5 @@
 import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 
-import { Rewards } from "@types";
-
 import { AuthGuard } from "@guards/auth.guard";
 
 import TbwService from "./tbw.service";

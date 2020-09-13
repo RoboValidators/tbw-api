@@ -67,10 +67,7 @@ export default class TbwService {
 
   async processPayouts(from: number, to: number): Promise<TrueBlockWeightDTO> {
     const tbw = await this.calculatePayouts(from, to);
-    const result = await this.bcService.processPayout(tbw);
-
-    console.log(result);
-
+    await this.bcService.processPayout(tbw);
     return tbw;
   }
 }
