@@ -10,7 +10,7 @@ import { AppModule } from "@modules/app.module";
 import { INetworkConfig, Api } from "@types";
 import { NetworkConfig } from "@config";
 
-import * as serviceAccount from "./config/serviceAccountKey.json";
+import serviceAccount from "./config/serviceAccountKey.json";
 
 async function bootstrap() {
   // Initialize the firebase admin app BEFORE creating the application

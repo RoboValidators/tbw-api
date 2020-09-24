@@ -1,7 +1,7 @@
-import * as exceptions from "./exceptions.json";
-import * as genesisBlock from "./genesisBlock.json";
-import * as milestones from "./milestones.json";
-import * as network from "./network.json";
+import exceptions from "./exceptions.json";
+import genesisBlock from "./genesisBlock.json";
+import milestones from "./milestones.json";
+import network from "./network.json";
 
 export const config = {
   name: "Compendia",
