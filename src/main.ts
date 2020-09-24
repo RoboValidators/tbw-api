@@ -10,15 +10,13 @@ import { AppModule } from "@modules/app.module";
 import { INetworkConfig, Api } from "@types";
 import { NetworkConfig } from "@config";
 
-// eslint-disable-next-line
-import serviceAccount from "./config/serviceAccountKey.json";
-
 async function bootstrap() {
-  const serviceAccountKey = (process.env.serviceAccount as any) || serviceAccount;
+  const serviceAccountKey =
+    (process.env.serviceAccount as any) || (await import("./config/serviceAccountKey.json"));
 
   // Initialize the firebase admin app BEFORE creating the application
   const firebaseInstance = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccountKey),
+    credential: admin.credential.cert(serviceAccountKey as ServiceAccount),
     databaseURL: `https://${serviceAccountKey.project_id}.firebaseio.com`
   });
   fireorm.initialize(firebaseInstance.firestore());
