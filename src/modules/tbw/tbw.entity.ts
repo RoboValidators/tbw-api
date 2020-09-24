@@ -2,7 +2,9 @@ import { Collection } from "fireorm";
 
 import { Voter } from "@types";
 
-@Collection("trueBlockWeight")
+export const tbwCollectionName = "trueBlockWeight";
+
+@Collection(tbwCollectionName)
 export default class TrueBlockWeight {
   id: string;
   block: number;

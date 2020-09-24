@@ -2,13 +2,13 @@ import { CustomRepository, BaseFirestoreRepository } from "fireorm";
 
 import { Injectable } from "@nestjs/common";
 
-import VoterModel from "./voter.entity";
+import VoterModel, { votersCollectionName } from "./voter.entity";
 
 @Injectable()
 @CustomRepository(VoterModel)
 class VoterRepository extends BaseFirestoreRepository<VoterModel> {
   constructor() {
-    super("voters");
+    super(votersCollectionName);
   }
 }
 

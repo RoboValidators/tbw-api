@@ -1,10 +1,10 @@
 import { Module, Global } from "@nestjs/common";
 
-import VoterRepository from "./transaction.repository";
+import TransactionRepository from "./transaction.repository";
 
 @Global()
 @Module({
-  providers: [VoterRepository],
-  exports: [VoterRepository]
+  providers: [TransactionRepository],
+  exports: [TransactionRepository]
 })
-export class VoterModule {}
+export class TransactionModule {}

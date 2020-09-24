@@ -1,9 +1,11 @@
 import { Collection } from "fireorm";
 
-@Collection("transactions")
+export const transactionCollectionName = "transactions";
+
+@Collection(transactionCollectionName)
 export default class Transaction {
   id: string;
   wallet: string;
-  paidBalance: string;
-  pendingBalance: string;
+  amount: string;
+  txId: string;
 }

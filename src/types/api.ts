@@ -1,4 +1,4 @@
-import { BlockDTO, WalletDTO, VoteTransaction, Configuration } from "./blockchain";
+import { BlockDTO, WalletDTO, VoteTransaction, Configuration, Broadcast } from "./blockchain";
 
 interface MetaResponse {
   meta: {
@@ -34,4 +34,9 @@ export interface WalletResponse {
 // Doesn't contain meta data
 export interface ConfigResponse {
   data: Configuration;
+}
+
+// Doesn't contain meta data
+export interface BroadcastResponse {
+  data: Broadcast;
 }

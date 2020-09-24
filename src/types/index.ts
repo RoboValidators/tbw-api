@@ -3,6 +3,7 @@ import { Interfaces } from "@arkecosystem/crypto";
 export * as Api from "./api";
 export * as Blockchain from "./blockchain";
 
+// TODO refactor (2x Voter)
 export interface Voter {
   wallet: string;
   share: string;

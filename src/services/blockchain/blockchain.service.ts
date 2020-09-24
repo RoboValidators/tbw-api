@@ -7,60 +7,41 @@ import { ApiService } from "@services/api/api.service";
 import TrueBlockWeightDTO from "@modules/tbw/dto/TrueBlockWeightDTO";
 import { NetworkConfig } from "@config";
 import VoterRepository from "@services/voter/voter.repository";
+import { VoterDTO } from "@services/voter/voter.entity";
+import TransactionRepository from "@services/transaction/transaction.repository";
+import Transaction from "@services/transaction/transaction.entity";
 
 @Injectable()
 export class BlockchainService {
   public validator: string;
 
   constructor(
+    private readonly transactionRepository: TransactionRepository,
     private readonly voterRepository: VoterRepository,
     private readonly apiService: ApiService,
     private readonly configService: ConfigService
   ) {}
 
-  async processPayout(tbw: TrueBlockWeightDTO): Promise<void> {
+  async getbaseMultiPayment() {
     // Retrieve network config
     const networkConfig = await NetworkConfig.get();
     const { staticFees } = NetworkConfig.getFees();
 
-    // Get passphrases
-    const passphrase = this.configService.get<string>("MNEMONIC");
-    const secondPassphrase = this.configService.get<string | undefined>("SECOND_MNEMONIC");
-
-    // Find next nonce and all voters (with paid and pending balances)
+    // Find next nonce
     const nextNonce = await this.apiService.findNextNonce();
-    const voters = await this.voterRepository.find();
 
     // Start building multi tx
-    const multiPayment = Transactions.BuilderFactory.multiPayment()
+    return Transactions.BuilderFactory.multiPayment()
       .network(networkConfig.network.pubKeyHash)
       .version(2)
       .nonce(nextNonce)
       .fee(staticFees.multiPayment.toString());
+  }
 
-    // Upsert voter and add to multi payment
-    for (const recipient of Object.keys(tbw.rewards)) {
-      const amount = tbw.rewards[recipient];
-      const foundPayout = voters.find((voter) => voter.wallet === recipient);
-
-      if (foundPayout) {
-        await this.voterRepository.update({
-          id: foundPayout.id,
-          wallet: foundPayout.wallet,
-          paidBalance: new BigNumber(foundPayout.paidBalance).plus(amount).toFixed(8),
-          pendingBalance: "0"
-        });
-      } else {
-        await this.voterRepository.create({
-          id: recipient,
-          wallet: recipient,
-          paidBalance: amount,
-          pendingBalance: "0"
-        });
-      }
-
-      multiPayment.addPayment(recipient, new BigNumber(amount).times(1e8).toFixed(0));
-    }
+  async broadcastMultipayment(multiPayment: Transactions.TransactionBuilder<any>): Promise<string> {
+    // Get passphrases
+    const passphrase = this.configService.get<string>("MNEMONIC");
+    const secondPassphrase = this.configService.get<string | undefined>("SECOND_MNEMONIC");
 
     // First signature
     multiPayment.sign(passphrase);
@@ -72,6 +53,74 @@ export class BlockchainService {
 
     // Broadcast transaction (throw badRequest if fails)
     const tx = multiPayment.getStruct();
-    await this.apiService.broadcast(tx);
+    return this.apiService.broadcast(tx);
+  }
+
+  async processPayout(voters: VoterDTO[]): Promise<Transaction[]> {
+    const multiPayment = await this.getbaseMultiPayment();
+    const voterBatch = this.voterRepository.createBatch();
+    const txs = [];
+
+    // Update voters and add to multi payment
+    for (const voter of voters) {
+      voterBatch.update({
+        id: voter.id,
+        wallet: voter.wallet,
+        paidBalance: new BigNumber(voter.paidBalance).plus(voter.pendingBalance).toFixed(8),
+        pendingBalance: "0"
+      });
+
+      txs.push({
+        amount: voter.pendingBalance,
+        wallet: voter.id
+      });
+      multiPayment.addPayment(voter.id, new BigNumber(voter.pendingBalance).times(1e8).toFixed(0));
+    }
+
+    const txId = await this.broadcastMultipayment(multiPayment);
+    await voterBatch.commit();
+
+    return this.transactionRepository.addTransactions(txs, txId);
+  }
+
+  async processPayoutTbw(tbw: TrueBlockWeightDTO): Promise<Transaction[]> {
+    // Get multiPaymentBase and all voters
+    const multiPayment = await this.getbaseMultiPayment();
+    const voters = await this.voterRepository.find();
+    const voterBatch = this.voterRepository.createBatch();
+    const txs = [];
+
+    // Update voters and add to multi payment
+    for (const recipient of Object.keys(tbw.rewards)) {
+      const amount = tbw.rewards[recipient];
+      const foundPayout = voters.find((voter) => voter.id === recipient);
+
+      if (foundPayout) {
+        voterBatch.update({
+          id: foundPayout.id,
+          wallet: foundPayout.wallet,
+          paidBalance: new BigNumber(foundPayout.paidBalance).plus(amount).toFixed(8),
+          pendingBalance: "0"
+        });
+      } else {
+        voterBatch.create({
+          id: recipient,
+          wallet: recipient,
+          paidBalance: amount,
+          pendingBalance: "0"
+        });
+      }
+
+      txs.push({
+        amount,
+        wallet: recipient
+      });
+      multiPayment.addPayment(recipient, new BigNumber(amount).times(1e8).toFixed(0));
+    }
+
+    const txId = await this.broadcastMultipayment(multiPayment);
+    await voterBatch.commit();
+
+    return this.transactionRepository.addTransactions(txs, txId);
   }
 }
