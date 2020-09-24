@@ -38,5 +38,7 @@ jobs:
       
       - name: Build project
         env:
-          serviceAccount: ${{ secrets.SERVICEACCOUNT }}
+          TESTNET_CLIENT_EMAIL: ${{ secrets.TESTNET_CLIENT_EMAIL }}
+          TESTNET_PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
+          TESTNET_PROJECT_ID: ${{ secrets.TESTNET_PROJECT_ID }}
         run: yarn build
