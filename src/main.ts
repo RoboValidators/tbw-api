@@ -10,6 +10,7 @@ import { AppModule } from "@modules/app.module";
 import { INetworkConfig, Api } from "@types";
 import { NetworkConfig } from "@config";
 
+// eslint-disable-next-line
 import serviceAccount from "./config/serviceAccountKey.json";
 
 async function bootstrap() {
