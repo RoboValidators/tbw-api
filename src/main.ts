@@ -14,10 +14,12 @@ import { NetworkConfig } from "@config";
 import serviceAccount from "./config/serviceAccountKey.json";
 
 async function bootstrap() {
+  const serviceAccountKey = (process.env.serviceAccount as any) || serviceAccount;
+
   // Initialize the firebase admin app BEFORE creating the application
   const firebaseInstance = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount as ServiceAccount),
-    databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`
+    credential: admin.credential.cert(serviceAccountKey),
+    databaseURL: `https://${serviceAccountKey.project_id}.firebaseio.com`
   });
   fireorm.initialize(firebaseInstance.firestore());
 
