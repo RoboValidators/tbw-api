@@ -30,10 +30,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Set environment
-        env:
-          serviceAccount: ${{ secrets.SERVICEACCOUNT }}
-
       - name: Install
         run: yarn install --frozen-lockfile
 
@@ -41,4 +37,6 @@ jobs:
         run: yarn lint
       
       - name: Build project
+        env:
+          serviceAccount: ${{ secrets.SERVICEACCOUNT }}
         run: yarn build
