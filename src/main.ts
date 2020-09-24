@@ -4,20 +4,20 @@ import axios from "axios";
 
 import "firebase/firestore";
 import * as fireorm from "fireorm";
-import admin, { ServiceAccount } from "firebase-admin";
+import admin from "firebase-admin";
 
 import { AppModule } from "@modules/app.module";
 import { INetworkConfig, Api } from "@types";
 import { NetworkConfig } from "@config";
 
 async function bootstrap() {
-  const serviceAccountKey =
-    (process.env.serviceAccount as any) || (await import("./config/serviceAccountKey.json"));
-
-  // Initialize the firebase admin app BEFORE creating the application
   const firebaseInstance = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccountKey as ServiceAccount),
-    databaseURL: `https://${serviceAccountKey.project_id}.firebaseio.com`
+    credential: admin.credential.cert({
+      projectId: process.env.PROJECT_ID,
+      clientEmail: process.env.CLIENT_EMAIL,
+      privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, "\n")
+    }),
+    databaseURL: `https://${process.env.CLIENT_EMAIL}.firebaseio.com`
   });
   fireorm.initialize(firebaseInstance.firestore());
 
