@@ -32,7 +32,7 @@ jobs:
 
       - name: Set environment
         env:
-            serviceAccount: ${{ secrets.SERVICEACCOUNT }}
+          serviceAccount: ${{ secrets.SERVICEACCOUNT }}
 
       - name: Install
         run: yarn install --frozen-lockfile
