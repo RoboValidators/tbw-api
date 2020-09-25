@@ -4,7 +4,7 @@ import { toTransactionDto, TransactionDTO } from "./transaction.entity";
 import TransactionRepository from "./transaction.repository";
 
 @Injectable()
-export default class SimpleService {
+export default class TransactionService {
   constructor(private readonly transactionRepository: TransactionRepository) {}
 
   async findAll(): Promise<TransactionDTO[]> {

@@ -6,7 +6,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 import HealthController from "@modules/health/health.controller";
 
 import TbwModule from "./tbw/tbw.module";
-import SimpleModule from "./simple/simple.module";
+import VoterModule from "./voter/voter.module";
 import CronModule from "./cron/cron.module";
 import TransactionModule from "./transaction/transaction.module";
 
@@ -22,7 +22,7 @@ import TransactionModule from "./transaction/transaction.module";
     ScheduleModule.forRoot(),
     // Application modules
     TbwModule,
-    SimpleModule,
+    VoterModule,
     CronModule,
     TransactionModule
   ],

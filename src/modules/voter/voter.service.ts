@@ -3,18 +3,18 @@ import BigNumber from "bignumber.js";
 import { ConfigService } from "@nestjs/config";
 
 import { BlockchainService } from "@services/blockchain/blockchain.service";
-import { toVoterDto, VoterDTO } from "@services/voter/voter.entity";
-import VoterRepository from "@services/voter/voter.repository";
+import { toVoterDto, VoterDTO } from "@modules/voter/voter.entity";
+import VoterRepository from "@modules/voter/voter.repository";
 import Transaction from "@modules/transaction/transaction.entity";
 
 @Injectable()
-export default class SimpleService {
-  private readonly logger = new Logger(SimpleService.name);
+export default class VoterService {
+  private readonly logger = new Logger(VoterService.name);
 
   constructor(
+    private readonly voterRepository: VoterRepository,
     private readonly configService: ConfigService,
-    private readonly bcService: BlockchainService,
-    private readonly voterRepository: VoterRepository
+    private readonly bcService: BlockchainService
   ) {}
 
   async calculatePayouts(): Promise<VoterDTO[]> {

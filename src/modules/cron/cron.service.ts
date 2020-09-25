@@ -1,17 +1,17 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 
-import SimpleService from "@modules/simple/simple.service";
+import VoterService from "@modules/voter/voter.service";
 
 @Injectable()
 export class CronService {
   private readonly logger = new Logger(CronService.name);
 
-  constructor(private readonly simpleService: SimpleService) {}
+  constructor(private readonly voterService: VoterService) {}
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_DAY_AT_5PM)
   handleCron() {
     this.logger.log(`Handling scheduled payout`);
-    this.simpleService.processPayouts();
+    this.voterService.processPayouts();
   }
 }

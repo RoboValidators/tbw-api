@@ -6,8 +6,8 @@ import BigNumber from "bignumber.js";
 import { ApiService } from "@services/api/api.service";
 import TrueBlockWeightDTO from "@modules/tbw/dto/TrueBlockWeightDTO";
 import { NetworkConfig } from "@config";
-import VoterRepository from "@services/voter/voter.repository";
-import { VoterDTO } from "@services/voter/voter.entity";
+import VoterRepository from "@modules/voter/voter.repository";
+import { VoterDTO } from "@modules/voter/voter.entity";
 import Transaction from "@modules/transaction/transaction.entity";
 import TransactionRepository from "@modules/transaction/transaction.repository";
 
@@ -16,8 +16,8 @@ export class BlockchainService {
   public validator: string;
 
   constructor(
-    private readonly transactionRepository: TransactionRepository,
     private readonly voterRepository: VoterRepository,
+    private readonly transactionRepository: TransactionRepository,
     private readonly apiService: ApiService,
     private readonly configService: ConfigService
   ) {}
