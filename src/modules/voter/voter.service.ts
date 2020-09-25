@@ -12,9 +12,9 @@ export default class VoterService {
   private readonly logger = new Logger(VoterService.name);
 
   constructor(
+    private readonly bcService: BlockchainService,
     private readonly voterRepository: VoterRepository,
-    private readonly configService: ConfigService,
-    private readonly bcService: BlockchainService
+    private readonly configService: ConfigService
   ) {}
 
   async calculatePayouts(): Promise<VoterDTO[]> {

@@ -1,6 +1,4 @@
 import { Module } from "@nestjs/common";
-
-import { ApiModule } from "@services/api/api.module";
 import { BlockchainModule } from "@services/blockchain/blockchain.module";
 
 import VoterController from "./voter.controller";
@@ -9,7 +7,7 @@ import VoterService from "./voter.service";
 
 @Module({
   controllers: [VoterController],
-  imports: [ApiModule, BlockchainModule],
+  imports: [BlockchainModule],
   providers: [VoterService, VoterRepository],
   exports: [VoterService, VoterRepository]
 })
