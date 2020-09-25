@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 
 import { AuthGuard } from "@guards/auth.guard";
 import { VoterDTO } from "@modules/voter/voter.entity";
-import Transaction from "@modules/transaction/transaction.entity";
+import { TransactionDTO } from "@modules/transaction/transaction.entity";
 
 import VoterService from "./voter.service";
 
@@ -15,10 +15,9 @@ export default class VoterController {
     return this.voterService.calculatePayouts();
   }
 
-  // TODO return TransactionDTO??
   @Get("process")
   @UseGuards(AuthGuard)
-  async process(): Promise<Transaction[]> {
+  async process(): Promise<TransactionDTO[]> {
     return this.voterService.processPayouts();
   }
 }

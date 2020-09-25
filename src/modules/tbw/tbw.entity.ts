@@ -1,8 +1,23 @@
 import { Collection } from "fireorm";
 
-import { Voter } from "@types";
+import { Rewards, Voter } from "@types";
 
 export const tbwCollectionName = "trueBlockWeight";
+
+export class TrueBlockWeightDTO {
+  id: string;
+  fromBlock: number;
+  toBlock: number;
+  rewards: Rewards;
+
+  /**
+   * Payout statistics per block
+   */
+  blockReward: string; // Total rewards available for distribution
+  votersReward: string; // Total amount being paid to voters
+  licenseFee: string; // Fee for usage of the license
+  validatorFee: string; // Fee for the validator
+}
 
 @Collection(tbwCollectionName)
 export default class TrueBlockWeight {

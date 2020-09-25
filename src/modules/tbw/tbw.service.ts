@@ -6,8 +6,7 @@ import { Rewards } from "@types";
 import { BlockchainService } from "@services/blockchain/blockchain.service";
 
 import TbwRepository from "./tbw.repository";
-import TrueBlockWeightDTO from "./dto/TrueBlockWeightDTO";
-import TrueBlockWeight from "./tbw.entity";
+import TrueBlockWeight, { TrueBlockWeightDTO } from "./tbw.entity";
 
 @Injectable()
 export default class TbwService {

@@ -4,12 +4,12 @@ import { Transactions } from "@arkecosystem/crypto";
 import BigNumber from "bignumber.js";
 
 import { ApiService } from "@services/api/api.service";
-import TrueBlockWeightDTO from "@modules/tbw/dto/TrueBlockWeightDTO";
 import { NetworkConfig } from "@config";
 import VoterRepository from "@modules/voter/voter.repository";
 import { VoterDTO } from "@modules/voter/voter.entity";
 import Transaction from "@modules/transaction/transaction.entity";
 import TransactionRepository from "@modules/transaction/transaction.repository";
+import { TrueBlockWeightDTO } from "@modules/tbw/tbw.entity";
 
 @Injectable()
 export class BlockchainService {

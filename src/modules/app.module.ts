@@ -21,10 +21,10 @@ import TransactionModule from "./transaction/transaction.module";
     // Enable Cron Jobs
     ScheduleModule.forRoot(),
     // Application modules
-    TbwModule,
-    VoterModule,
-    CronModule,
-    TransactionModule
+    TbwModule, // /advanced endpoint
+    VoterModule, // /simple endpoint
+    TransactionModule, // /transactions endpoint
+    CronModule
   ],
   controllers: [HealthController]
 })
