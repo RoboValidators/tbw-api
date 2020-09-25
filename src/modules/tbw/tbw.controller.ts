@@ -1,6 +1,6 @@
-import { Controller, Get, Query, UseGuards } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 
-import { AuthGuard } from "@guards/auth.guard";
+// import { AuthGuard } from "@guards/auth.guard";
 
 import TbwService from "./tbw.service";
 import { TrueBlockWeightDTO } from "./tbw.entity";
@@ -17,6 +17,7 @@ export default class TbwController {
     return this.tbwService.calculatePayouts(from, to);
   }
 
+  /*
   @Get("process")
   @UseGuards(AuthGuard)
   async process(@Query("from") f?: string, @Query("to") t?: string): Promise<TrueBlockWeightDTO> {
@@ -25,4 +26,5 @@ export default class TbwController {
 
     return this.tbwService.processPayouts(from, to);
   }
+  */
 }

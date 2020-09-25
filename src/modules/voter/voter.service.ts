@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, Logger } from "@nestjs/common";
 import BigNumber from "bignumber.js";
 import { ConfigService } from "@nestjs/config";
 
@@ -21,7 +21,7 @@ export default class VoterService {
     const voters = await this.voterRepository.find();
 
     this.logger.log(`Payout for ${voters.length} voters since the last payout`);
-    console.table(voters);
+    console.table(voters, ["wallet", "paidBalance", "pendingBalance"]);
 
     return voters.map((voters) => toVoterDto(voters));
   }
@@ -35,7 +35,7 @@ export default class VoterService {
     );
 
     if (filteredPayouts.length < 2) {
-      throw new NotFoundException("Not enough payments are eligable for processing");
+      throw new ConflictException("Not enough payments are eligable for processing");
     }
 
     return this.bcService.processPayout(filteredPayouts);
