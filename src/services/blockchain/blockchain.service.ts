@@ -8,8 +8,8 @@ import TrueBlockWeightDTO from "@modules/tbw/dto/TrueBlockWeightDTO";
 import { NetworkConfig } from "@config";
 import VoterRepository from "@services/voter/voter.repository";
 import { VoterDTO } from "@services/voter/voter.entity";
-import TransactionRepository from "@services/transaction/transaction.repository";
-import Transaction from "@services/transaction/transaction.entity";
+import Transaction from "@modules/transaction/transaction.entity";
+import TransactionRepository from "@modules/transaction/transaction.repository";
 
 @Injectable()
 export class BlockchainService {

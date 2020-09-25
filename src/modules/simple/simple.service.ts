@@ -5,7 +5,7 @@ import { ConfigService } from "@nestjs/config";
 import { BlockchainService } from "@services/blockchain/blockchain.service";
 import { toVoterDto, VoterDTO } from "@services/voter/voter.entity";
 import VoterRepository from "@services/voter/voter.repository";
-import Transaction from "@services/transaction/transaction.entity";
+import Transaction from "@modules/transaction/transaction.entity";
 
 @Injectable()
 export default class SimpleService {

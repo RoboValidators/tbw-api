@@ -1,7 +1,7 @@
 import { Module, Global } from "@nestjs/common";
 
+import TransactionModule from "@modules/transaction/transaction.module";
 import { ApiModule } from "@services/api/api.module";
-import { TransactionModule } from "@services/transaction/transaction.module";
 import { VoterModule } from "@services/voter/voter.module";
 
 import { BlockchainService } from "./blockchain.service";

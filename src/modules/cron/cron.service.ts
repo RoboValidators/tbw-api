@@ -9,7 +9,7 @@ export class CronService {
 
   constructor(private readonly simpleService: SimpleService) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   handleCron() {
     this.logger.log(`Handling scheduled payout`);
     this.simpleService.processPayouts();

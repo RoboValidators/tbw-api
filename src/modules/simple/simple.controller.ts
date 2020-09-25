@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 
 import { AuthGuard } from "@guards/auth.guard";
 import { VoterDTO } from "@services/voter/voter.entity";
-import Transaction from "@services/transaction/transaction.entity";
+import Transaction from "@modules/transaction/transaction.entity";
 
 import SimpleService from "./simple.service";
 
