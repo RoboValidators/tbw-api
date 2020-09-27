@@ -17,16 +17,16 @@ class TransactionCountRepository extends BaseFirestoreRepository<TransactionCoun
   async upsert(amount: number): Promise<number> {
     const count = await this.findById(this.id);
     if (count) {
-      const length = amount;
-      await this.create({
+      const length = new BigNumber(count.length).plus(amount).toNumber();
+      await this.update({
         id: this.id,
         length
       });
 
       return length;
     } else {
-      const length = new BigNumber(count.length).plus(amount).toNumber();
-      await this.update({
+      const length = amount;
+      await this.create({
         id: this.id,
         length
       });
