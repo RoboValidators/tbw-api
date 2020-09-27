@@ -13,27 +13,6 @@ class VoterCountRepository extends BaseFirestoreRepository<VoterCountModel> {
     super(voterCountCollectionName);
     this.id = "count";
   }
-
-  async upsert(amount: number): Promise<number> {
-    const count = await this.findById(this.id);
-    if (count) {
-      const length = new BigNumber(count.length).plus(amount).toNumber();
-      await this.update({
-        id: this.id,
-        length
-      });
-
-      return length;
-    } else {
-      const length = amount;
-      await this.create({
-        id: this.id,
-        length
-      });
-
-      return length;
-    }
-  }
 }
 
 export default VoterCountRepository;

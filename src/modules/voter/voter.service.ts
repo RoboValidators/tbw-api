@@ -26,8 +26,8 @@ export default class VoterService {
     const result = await this.voterRepository.findAllPaginated(page, limit);
     const voters = result.map((voter) => toVoterDto(voter));
 
-    const count = await this.voterCountRepository.upsert(result.length);
-    const meta = buildPaginationMeta(count, page, limit, path);
+    const count = await this.voterCountRepository.findById(this.voterCountRepository.id);
+    const meta = buildPaginationMeta(count.length, page, limit, path);
 
     return {
       meta: meta.meta,
