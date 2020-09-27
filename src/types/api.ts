@@ -1,17 +1,27 @@
+import { TransactionDTO } from "@modules/transaction/transaction.entity";
+import { VoterDTO } from "@modules/voter/voter.entity";
+
 import { BlockDTO, WalletDTO, VoteTransaction, Configuration, Broadcast } from "./blockchain";
 
-interface MetaResponse {
+export interface MetaResponse {
   meta: {
-    totalCountIsEstimate: boolean;
+    totalCountIsEstimate?: boolean;
     count: number;
     pageCount: number;
     totalCount: number;
-    next: string;
+    next: string | null;
     previous: string | null;
     self: string;
     first: string;
     last: string;
   };
+}
+
+export interface TransactionResponseDTO extends MetaResponse {
+  data: TransactionDTO[];
+}
+export interface VoterResponseDTO extends MetaResponse {
+  data: VoterDTO[];
 }
 
 export interface BlockResponse extends MetaResponse {

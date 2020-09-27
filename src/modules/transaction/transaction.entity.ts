@@ -9,23 +9,6 @@ export interface TransactionDTO {
   txId: string;
 }
 
-export interface TransactionsDTO {
-  meta: {
-    count: number;
-    pageCount: number;
-    totalCount: number;
-    next: string | null;
-    previous: string | null;
-    self: string;
-    first: string;
-    last: string;
-  };
-  data: {
-    transactions: TransactionDTO[];
-    count: number;
-  };
-}
-
 @Collection(transactionCollectionName)
 export default class Transaction {
   id: string;

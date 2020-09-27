@@ -1,6 +1,6 @@
 import { Collection } from "fireorm";
 
-export const votersCollectionName = "voters";
+export const voterCollectionName = "voters";
 
 export interface VoterDTO {
   id: string;
@@ -9,7 +9,7 @@ export interface VoterDTO {
   pendingBalance: string;
 }
 
-@Collection(votersCollectionName)
+@Collection(voterCollectionName)
 export default class Voter {
   id: string;
   wallet: string;

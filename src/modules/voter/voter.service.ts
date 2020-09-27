@@ -6,6 +6,10 @@ import { BlockchainService } from "@services/blockchain/blockchain.service";
 import { toVoterDto, VoterDTO } from "@modules/voter/voter.entity";
 import VoterRepository from "@modules/voter/voter.repository";
 import Transaction from "@modules/transaction/transaction.entity";
+import { Api } from "@types";
+import { buildPaginationMeta } from "@util/pagination";
+
+import VoterCountRepository from "./voterCount.repository";
 
 @Injectable()
 export default class VoterService {
@@ -14,8 +18,22 @@ export default class VoterService {
   constructor(
     private readonly bcService: BlockchainService,
     private readonly voterRepository: VoterRepository,
+    private readonly voterCountRepository: VoterCountRepository,
     private readonly configService: ConfigService
   ) {}
+
+  async findAllPaginated(page: number, limit: number, path: string): Promise<Api.VoterResponseDTO> {
+    const result = await this.voterRepository.findAllPaginated(page, limit);
+    const voters = result.map((voter) => toVoterDto(voter));
+
+    const count = await this.voterCountRepository.upsert(result.length);
+    const meta = buildPaginationMeta(count, page, limit, path);
+
+    return {
+      meta: meta.meta,
+      data: voters
+    };
+  }
 
   async calculatePayouts(): Promise<VoterDTO[]> {
     const voters = await this.voterRepository.find();

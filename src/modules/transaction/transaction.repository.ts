@@ -1,9 +1,6 @@
-import { CustomRepository, BaseFirestoreRepository } from "fireorm";
 import admin from "firebase-admin";
-
 import { Injectable } from "@nestjs/common";
-
-import { BigNumber } from "@arkecosystem/crypto/dist/utils";
+import { CustomRepository, BaseFirestoreRepository } from "fireorm";
 
 import TransactionModel, { transactionCollectionName } from "./transaction.entity";
 
@@ -14,10 +11,7 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
     super(transactionCollectionName);
   }
 
-  async getPaginated(
-    page: number,
-    limit: number
-  ): Promise<{ transactions: TransactionModel[]; count: number }> {
+  async findAllPaginated(page: number, limit: number): Promise<TransactionModel[]> {
     const db = admin.firestore();
     const result = await db
       .collection(this.colName)
@@ -26,9 +20,7 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
       .limit(limit)
       .get();
 
-    const count = (await db.collection(`${this.colName}-count`).get()).docs[0].data().length;
-
-    const transactions = result.docs.map((doc) => {
+    return result.docs.map((doc) => {
       const data = doc.data();
       const transaction = new TransactionModel();
       transaction.id = data.id;
@@ -38,11 +30,6 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
 
       return transaction;
     });
-
-    return {
-      transactions,
-      count
-    };
   }
 
   async addTransactions(
@@ -63,18 +50,6 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
     }
 
     await batch.commit();
-
-    const db = admin.firestore();
-    const ref = db.collection(`${this.colName}-count`).doc("count");
-    const get = await ref.get();
-    if (get.exists) {
-      await ref.update({
-        length: new BigNumber(get.data().length as any).plus(txs.length).toString()
-      });
-    } else {
-      await ref.create({ length: txs.length.toString() });
-    }
-
     return txModels;
   }
 }
