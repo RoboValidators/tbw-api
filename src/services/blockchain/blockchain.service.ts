@@ -10,6 +10,7 @@ import { VoterDTO } from "@modules/voter/voter.entity";
 import Transaction from "@modules/transaction/transaction.entity";
 import TransactionRepository from "@modules/transaction/transaction.repository";
 import { TrueBlockWeightDTO } from "@modules/tbw/tbw.entity";
+import TransactionCountRepository from "@modules/transaction/transactionCount.repository";
 
 @Injectable()
 export class BlockchainService {
@@ -18,6 +19,7 @@ export class BlockchainService {
   constructor(
     private readonly voterRepository: VoterRepository,
     private readonly transactionRepository: TransactionRepository,
+    private readonly txCountRepository: TransactionCountRepository,
     private readonly apiService: ApiService,
     private readonly configService: ConfigService
   ) {}
@@ -80,7 +82,10 @@ export class BlockchainService {
     const txId = await this.broadcastMultipayment(multiPayment);
     await voterBatch.commit();
 
-    return this.transactionRepository.addTransactions(txs, txId);
+    const addedTransactions = await this.transactionRepository.addTransactions(txs, txId);
+    await this.txCountRepository.upsert(addedTransactions.length);
+
+    return addedTransactions;
   }
 
   async processPayoutTbw(tbw: TrueBlockWeightDTO): Promise<Transaction[]> {

@@ -16,7 +16,7 @@ class VoterRepository extends BaseFirestoreRepository<VoterModel> {
     const db = admin.firestore();
     const result = await db
       .collection(this.colName)
-      .orderBy("pendingBalance")
+      .orderBy("pendingBalance", "desc")
       .offset((page - 1) * limit)
       .limit(limit)
       .get();

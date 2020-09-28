@@ -15,7 +15,7 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
     const db = admin.firestore();
     const result = await db
       .collection(this.colName)
-      .orderBy("amount")
+      .orderBy("date", "desc")
       .offset((page - 1) * limit)
       .limit(limit)
       .get();
@@ -27,6 +27,7 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
       transaction.amount = data.amount;
       transaction.txId = data.txId;
       transaction.wallet = data.wallet;
+      transaction.date = data.date;
 
       return transaction;
     });
@@ -44,6 +45,8 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
       txModel.amount = tx.amount;
       txModel.wallet = tx.wallet;
       txModel.txId = txId;
+      txModel.date = Date.now();
+
       txModels.push(txModel);
 
       batch.create(txModel);

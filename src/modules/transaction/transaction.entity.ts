@@ -7,6 +7,7 @@ export interface TransactionDTO {
   wallet: string;
   amount: string;
   txId: string;
+  date: number;
 }
 
 @Collection(transactionCollectionName)
@@ -15,6 +16,7 @@ export default class Transaction {
   wallet: string;
   amount: string;
   txId: string;
+  date: number;
 }
 
 export const toTransactionDto = (tx: Transaction): TransactionDTO => {
@@ -22,6 +24,7 @@ export const toTransactionDto = (tx: Transaction): TransactionDTO => {
     id: tx.id,
     wallet: tx.wallet,
     amount: tx.amount,
-    txId: tx.txId
+    txId: tx.txId,
+    date: tx.date
   };
 };

@@ -8,6 +8,6 @@ import TransactionCountRepository from "./transactionCount.repository";
 @Module({
   controllers: [TransactionController],
   providers: [TransactionService, TransactionRepository, TransactionCountRepository],
-  exports: [TransactionRepository]
+  exports: [TransactionRepository, TransactionCountRepository]
 })
 export default class TransactionModule {}
