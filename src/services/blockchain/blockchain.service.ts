@@ -79,8 +79,8 @@ export class BlockchainService {
       multiPayment.addPayment(voter.id, new BigNumber(voter.pendingBalance).times(1e8).toFixed(0));
     }
 
-    const txId = await this.broadcastMultipayment(multiPayment);
     await voterBatch.commit();
+    const txId = await this.broadcastMultipayment(multiPayment);
 
     const addedTransactions = await this.transactionRepository.addTransactions(txs, txId);
     await this.txCountRepository.upsert(addedTransactions.length);
@@ -123,8 +123,8 @@ export class BlockchainService {
       multiPayment.addPayment(recipient, new BigNumber(amount).times(1e8).toFixed(0));
     }
 
-    const txId = await this.broadcastMultipayment(multiPayment);
     await voterBatch.commit();
+    const txId = await this.broadcastMultipayment(multiPayment);
 
     return this.transactionRepository.addTransactions(txs, txId);
   }
