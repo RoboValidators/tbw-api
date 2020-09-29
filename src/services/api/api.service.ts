@@ -35,12 +35,13 @@ export class ApiService {
     return (parseInt(result.data.nonce) + 1).toString();
   }
 
-  async broadcast(tx: ITransactionData): Promise<void> {
+  async broadcast(tx: ITransactionData): Promise<string> {
     const result = this.httpService.post("/transactions", {
       transactions: [tx]
     });
 
-    await this.extractData(result);
+    const res = await this.extractData<Api.BroadcastResponse>(result);
+    return res.data.broadcast[0];
   }
 
   async findLastBlock(): Promise<Api.BlockResponse> {
