@@ -93,3 +93,27 @@ export interface Timestamp {
   unix: number;
   human: string;
 }
+
+export interface StaticFees {
+  transfer: number;
+  secondSignature: number;
+  delegateRegistration: number;
+  vote: number;
+  multiSignature: number;
+  multiPayment: number;
+  delegateResignation: number;
+  stakeCreate: number;
+  stakeRedeem: number;
+  stakeCancel: number;
+  setFile: number;
+}
+
+export interface Fees {
+  staticFees: StaticFees;
+}
+
+export interface Configuration {
+  constants: {
+    fees: Fees;
+  };
+}

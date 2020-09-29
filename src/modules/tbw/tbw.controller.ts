@@ -1,29 +1,40 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 
-import { ApiService } from "../../services/api/api.service";
+import { AuthGuard } from "@guards/auth.guard";
 
-import { Rewards } from "../../types";
 import TbwService from "./tbw.service";
 import TrueBlockWeight from "./tbw.entity";
+import TrueBlockWeightDTO from "./dto/TrueBlockWeightDTO";
 
 @Controller("tbw")
 export default class TbwController {
   constructor(private readonly tbwService: TbwService) {}
 
   @Get()
-  findBetweenBlocks(from: number, to: number): Promise<TrueBlockWeight[]> {
-    const f = 0;
-    const t = 300000;
+  findBetweenBlocks(
+    @Query("from") f?: string,
+    @Query("to") t?: string
+  ): Promise<TrueBlockWeight[]> {
+    const from = f ? parseInt(f) : 0;
+    const to = t ? parseInt(t) : Number.MAX_SAFE_INTEGER;
 
-    return this.tbwService.findBetweenBlocks(f, t);
+    return this.tbwService.findBetweenBlocks(from, to);
   }
 
   @Get("dry")
-  async dryRun(@Query("from") f?: string, @Query("to") t?: string): Promise<Rewards> {
+  async dryRun(@Query("from") f?: string, @Query("to") t?: string): Promise<TrueBlockWeightDTO> {
     const from = f ? parseInt(f) : 0;
-    const to = t ? parseInt(t) : 0;
-    // const to = t ? parseInt(t) : (await this.apiService.findLastBlock()).data.height;
+    const to = t ? parseInt(t) : Number.MAX_SAFE_INTEGER;
 
     return this.tbwService.calculatePayouts(from, to);
+  }
+
+  @Get("process")
+  @UseGuards(AuthGuard)
+  async process(@Query("from") f?: string, @Query("to") t?: string): Promise<TrueBlockWeightDTO> {
+    const from = f ? parseInt(f) : 0;
+    const to = t ? parseInt(t) : Number.MAX_SAFE_INTEGER;
+
+    return this.tbwService.processPayouts(from, to);
   }
 }

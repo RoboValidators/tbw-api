@@ -1,5 +1,5 @@
+import { NetworkConfig } from "@config";
 import { Module, HttpModule, Global } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { setupCache } from "axios-cache-adapter";
 
 import { ApiService } from "./api.service";
@@ -12,13 +12,13 @@ const cache = setupCache({
 @Module({
   imports: [
     HttpModule.registerAsync({
-      useFactory: async (configService: ConfigService) => ({
-        baseURL: configService.get<string>("NETWORK_API"),
+      useFactory: async () => ({
+        baseURL: (await NetworkConfig.get()).config.relayUrl,
         adapter: cache.adapter
-      }),
-      inject: [ConfigService]
+      })
     })
   ],
-  providers: [ApiService]
+  providers: [ApiService],
+  exports: [ApiService]
 })
 export class ApiModule {}

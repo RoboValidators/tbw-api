@@ -1,15 +1,11 @@
-import { HttpService, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpService, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 
 import { AxiosResponse } from "axios";
 import { ConfigService } from "@nestjs/config";
 
-import {
-  BlockResponse,
-  WalletResponse,
-  BlocksResponse,
-  VoteTransactionResponse
-} from "../../types/api";
+import { Api } from "@types";
+import { ITransactionData } from "@arkecosystem/crypto/dist/interfaces";
 
 @Injectable()
 export class ApiService {
@@ -19,26 +15,44 @@ export class ApiService {
     this.validator = this.configService.get<string>("VALIDATOR_NAME");
   }
 
-  async findWallet(addressOrName = this.validator): Promise<WalletResponse> {
+  async findWalletCached(addressOrName = this.validator): Promise<Api.WalletResponse> {
     const result = this.httpService.get(`/wallets/${addressOrName}`, {
       cache: {
         maxAge: 15 * 60 * 1000 // 15 minutes
       }
     });
 
-    return this.extractData<WalletResponse>(result);
+    return this.extractData<Api.WalletResponse>(result);
   }
 
-  async findLastBlock(): Promise<BlockResponse> {
+  async findWallet(addressOrName = this.validator): Promise<Api.WalletResponse> {
+    const result = this.httpService.get(`/wallets/${addressOrName}`);
+    return this.extractData<Api.WalletResponse>(result);
+  }
+
+  async findNextNonce(addressOrName = this.validator): Promise<string> {
+    const result = await this.findWallet(addressOrName);
+    return (parseInt(result.data.nonce) + 1).toString();
+  }
+
+  async broadcast(tx: ITransactionData): Promise<void> {
+    const result = this.httpService.post("/transactions", {
+      transactions: [tx]
+    });
+
+    await this.extractData(result);
+  }
+
+  async findLastBlock(): Promise<Api.BlockResponse> {
     const result = this.httpService.get("/blocks/last");
-    return this.extractData<BlockResponse>(result);
+    return this.extractData<Api.BlockResponse>(result);
   }
 
   async findAllBlocksByValidator(
     from: number,
     to: number,
     validator = this.validator
-  ): Promise<BlocksResponse> {
+  ): Promise<Api.BlocksResponse> {
     const wallet = await this.findWallet(validator);
 
     if (!to) {
@@ -53,14 +67,14 @@ export class ApiService {
       }
     });
 
-    return this.extractData<BlocksResponse>(result);
+    return this.extractData<Api.BlocksResponse>(result);
   }
 
   async findVoteAge(addressOrName: string): Promise<any> {
     const wallet = await this.findWallet(this.validator);
 
     const result = this.httpService.get(`wallets/${addressOrName}/transactions?typeGroup=1&type=3`);
-    const extractedResult = await this.extractData<VoteTransactionResponse>(result);
+    const extractedResult = await this.extractData<Api.VoteTransactionResponse>(result);
 
     const lastVoteTx = extractedResult.data[0];
 
@@ -82,6 +96,12 @@ export class ApiService {
 
   async extractData<T>(request: Observable<AxiosResponse<T>>): Promise<T> {
     const resolvedRequest = await request.toPromise();
+
+    const errors = (resolvedRequest.data as any)?.errors;
+    if (errors) {
+      throw new BadRequestException(errors);
+    }
+
     return resolvedRequest.data;
   }
 }

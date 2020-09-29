@@ -1,0 +1,79 @@
+[
+  {
+    "height": 1,
+    "p2p": {
+      "minimumVersions": ["^2.9.14"]
+    },
+    "reward": 0,
+    "topReward": 0,
+    "activeDelegates": 47,
+    "topDelegates": 0,
+    "blocktime": 6,
+    "block": {
+      "version": 0,
+      "maxTransactions": 150,
+      "maxPayload": 6300000,
+      "acceptExpiredTransactionTimestamps": false
+    },
+    "epoch": "2020-08-21T16:00:00.000Z",
+    "vendorFieldLength": 0,
+    "multiPaymentLimit": 128,
+    "staticFeesOnly": true,
+    "fees": {
+      "staticFees": {
+        "transfer": 10000000,
+        "secondSignature": 50000000,
+        "delegateRegistration": 25000000000,
+        "vote": 100000000,
+        "multiSignature": 50000000,
+        "multiPayment": 25000000,
+        "delegateResignation": 1000000000,
+        "stakeCreate": 0,
+        "stakeRedeem": 0,
+        "stakeCancel": 500000000,
+        "setFile": 100000000
+      }
+    },
+    "balancePower": 1,
+    "stakeLevels": {
+      "7889400": 50,
+      "15778800": 75,
+      "31557600": 120
+    },
+    "minimumStake": 10000000000,
+    "graceEnd": 3600,
+    "powerUp": 169200,
+    "ipfs": {
+      "maxFileSize": {
+        "description": 30000,
+        "logo": 300000
+      }
+    }
+  },
+  {
+    "height": 2,
+    "aip11": true,
+    "block": {
+      "idFullSha256": true
+    }
+  },
+  {
+    "height": 161000,
+    "p2p": {
+      "minimumVersions": ["^2.10.0"]
+    }
+  },
+  {
+    "height": 220000,
+    "minimumStake": 500000000000,
+    "stakeLevels": {
+      "31557600": 100
+    }
+  },
+  {
+    "height": 300000,
+    "reward": 390000000,
+    "topReward": 484000000,
+    "topDelegates": 5
+  }
+]
