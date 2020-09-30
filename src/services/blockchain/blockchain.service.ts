@@ -11,6 +11,7 @@ import Transaction from "@modules/transaction/transaction.entity";
 import TransactionRepository from "@modules/transaction/transaction.repository";
 import { TrueBlockWeightDTO } from "@modules/tbw/tbw.entity";
 import TransactionCountRepository from "@modules/transaction/transactionCount.repository";
+import { dec } from "@util";
 
 @Injectable()
 export class BlockchainService {
@@ -42,8 +43,10 @@ export class BlockchainService {
 
   async broadcastMultipayment(multiPayment: Transactions.TransactionBuilder<any>): Promise<string> {
     // Get passphrases
-    const passphrase = this.configService.get<string>("MNEMONIC");
-    const secondPassphrase = this.configService.get<string | undefined>("SECOND_MNEMONIC");
+    const passphraseEnc = this.configService.get<string>("MNEMONIC");
+    const secondPassphraseEnc = this.configService.get<string | undefined>("SECOND_MNEMONIC");
+    const passphrase = await dec(passphraseEnc);
+    const secondPassphrase = await dec(secondPassphraseEnc);
 
     // First signature
     multiPayment.sign(passphrase);
