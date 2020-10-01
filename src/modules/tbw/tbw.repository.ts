@@ -2,13 +2,13 @@ import { CustomRepository, BaseFirestoreRepository } from "fireorm";
 
 import { Injectable } from "@nestjs/common";
 
-import TrueBlockWeightModel from "./tbw.entity";
+import TrueBlockWeightModel, { tbwCollectionName } from "./tbw.entity";
 
 @Injectable()
 @CustomRepository(TrueBlockWeightModel)
 class TbwRepository extends BaseFirestoreRepository<TrueBlockWeightModel> {
   constructor() {
-    super("trueBlockWeight");
+    super(tbwCollectionName);
   }
 
   async findBetweenBlocks(from: number, to: number): Promise<TrueBlockWeightModel[]> {

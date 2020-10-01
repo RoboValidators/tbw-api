@@ -15,10 +15,11 @@ async function bootstrap() {
     credential: admin.credential.cert({
       projectId: process.env.PROJECT_ID,
       clientEmail: process.env.CLIENT_EMAIL,
-      privateKey: process.env.PRIVATE_KEY.replace(/\\n/g, "\n")
+      privateKey: process.env.PRIVATE_KEY.replace(/\\n/gm, "\n")
     }),
-    databaseURL: `https://${process.env.CLIENT_EMAIL}.firebaseio.com`
+    databaseURL: `https://${process.env.PROJECT_ID}.firebaseio.com`
   });
+
   fireorm.initialize(firebaseInstance.firestore());
 
   // Create server app

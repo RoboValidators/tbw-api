@@ -1,14 +1,12 @@
 import { Injectable, Logger } from "@nestjs/common";
 import BigNumber from "bignumber.js";
-import { uniqBy } from "lodash";
 
 import { Rewards } from "@types";
 
 import { BlockchainService } from "@services/blockchain/blockchain.service";
 
 import TbwRepository from "./tbw.repository";
-import TrueBlockWeightDTO from "./dto/TrueBlockWeightDTO";
-import TrueBlockWeight from "./tbw.entity";
+import TrueBlockWeight, { TrueBlockWeightDTO } from "./tbw.entity";
 
 @Injectable()
 export default class TbwService {
@@ -31,8 +29,7 @@ export default class TbwService {
     let totalVotersRewards = new BigNumber(0);
     let totalBlockRewards = new BigNumber(0);
 
-    const uniqueTbws: TrueBlockWeight[] = uniqBy(tbws, "block");
-    const payoutPerWallet: Rewards = uniqueTbws.reduce((acc, tbw) => {
+    const payoutPerWallet: Rewards = tbws.reduce((acc, tbw) => {
       totalBlockRewards = totalBlockRewards.plus(tbw.blockReward);
       totalValidatorFee = totalValidatorFee.plus(tbw.validatorFee);
       totalLicenseFee = totalLicenseFee.plus(tbw.licenseFee);
@@ -67,7 +64,7 @@ export default class TbwService {
 
   async processPayouts(from: number, to: number): Promise<TrueBlockWeightDTO> {
     const tbw = await this.calculatePayouts(from, to);
-    await this.bcService.processPayout(tbw);
+    await this.bcService.processPayoutTbw(tbw);
     return tbw;
   }
 }

@@ -117,3 +117,10 @@ export interface Configuration {
     fees: Fees;
   };
 }
+
+export interface Broadcast {
+  accept: string[];
+  broadcast: string[];
+  excess: string[];
+  invalid: string[];
+}
