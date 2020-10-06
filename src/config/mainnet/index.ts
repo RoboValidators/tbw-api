@@ -6,7 +6,7 @@ import network from "./network.json";
 export const config = {
   name: "Compendia",
   token: "BIND",
-  relayUrl: "https://api.compendia.org/api/v2",
+  relayUrl: "https://apis.compendia.org/api/v2",
   explorerUrl: "https://bindscan.io",
   network: "mainnet"
 };
