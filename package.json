@@ -38,7 +38,7 @@
     "axios-cache-adapter": "2.5.0",
     "bignumber.js": "9.0.1",
     "eslint-plugin-prettier": "3.1.4",
-    "firebase": "7.22.1",
+    "firebase": "7.23.0",
     "firebase-admin": "9.2.0",
     "fireorm": "0.17.1",
     "reflect-metadata": "0.1.13",
