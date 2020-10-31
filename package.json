@@ -40,7 +40,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "firebase": "7.24.0",
     "firebase-admin": "9.3.0",
-    "fireorm": "0.17.1",
+    "fireorm": "0.17.2",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "6.6.2"
