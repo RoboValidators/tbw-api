@@ -75,10 +75,10 @@
     ora "4.0.3"
     rxjs "6.5.4"
 
-"@arkecosystem/crypto@2.7.13":
-  version "2.7.13"
-  resolved "https://registry.yarnpkg.com/@arkecosystem/crypto/-/crypto-2.7.13.tgz#42f022440e02a30f911e9f38319d1a2513049c0b"
-  integrity sha512-LJrabWnH4vyBVmKsHFW9LhBWCZZAlVXu1b6hR7dNsIxyy4gw6ZjMt8EQ4lB+yUcf5cdGMH5MGd73HEOxARenKg==
+"@arkecosystem/crypto@2.7.24":
+  version "2.7.24"
+  resolved "https://registry.yarnpkg.com/@arkecosystem/crypto/-/crypto-2.7.24.tgz#7e2bfd6374f057ba86cc136e335cbb6f1b342456"
+  integrity sha512-jGtscWk04hvoqXOkWdh3CgNFZNQBAXHLkrQOPqLw410yL218EtdBthxf+9+us2JnzoP7crfMa95bsL61aCzEVQ==
   dependencies:
     "@arkecosystem/utils" "^1.2"
     "@types/bytebuffer" "^5.0.40"
