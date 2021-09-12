@@ -6,6 +6,7 @@ import TbwService from "./tbw.service";
 
 @Module({
   controllers: [TbwController],
-  providers: [TbwService, TbwRepository]
+  providers: [TbwService, TbwRepository],
+  exports: [TbwService, TbwRepository]
 })
 export default class TbwModule {}

@@ -29,4 +29,14 @@ export default class TransactionService {
       data: transactions
     };
   }
+
+  async removeOldTransactions(): Promise<Api.TransactionResponseDTO> {
+    const result = await this.transactionRepository.removeOldTransactions();
+    const transactions = result.map((tx) => toTransactionDto(tx));
+
+    return {
+      meta: null,
+      data: transactions
+    };
+  }
 }
