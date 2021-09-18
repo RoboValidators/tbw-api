@@ -23,7 +23,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "pm2:list": "pm2 list",
     "pm2:logs": "pm2 logs",
-    "pm2:restart": "pm2 restart tbw-api"
+    "pm2:restart": "pm2 restart tbw-api",
+    "pm2:delete": "pm2 delete tbw-api",
+    "pm2:stop": "pm2 stop tbw-api"
   },
   "dependencies": {
     "@arkecosystem/crypto": "2.7.25",
