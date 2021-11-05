@@ -35,7 +35,7 @@
     "@nestjs/platform-express": "7.4.4",
     "@nestjs/schedule": "0.4.3",
     "@nestjs/terminus": "7.2.0",
-    "@types/lodash": "4.14.172",
+    "@types/lodash": "4.14.176",
     "axios": "0.20.0",
     "axios-cache-adapter": "2.7.3",
     "bignumber.js": "9.0.1",
