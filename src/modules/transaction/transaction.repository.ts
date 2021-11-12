@@ -55,6 +55,24 @@ class TransactionRepository extends BaseFirestoreRepository<TransactionModel> {
     await batch.commit();
     return txModels;
   }
+
+  async removeOldTransactions(days = 30): Promise<TransactionModel[]> {
+    const oldDate = new Date();
+    oldDate.setDate(oldDate.getDate() - days);
+
+    const txs = await this.whereLessOrEqualThan("date", oldDate).find();
+
+    const batch = this.createBatch();
+    const oldTxs = [];
+
+    for (const tx of txs) {
+      oldTxs.push(tx);
+      batch.delete(tx);
+    }
+
+    await batch.commit();
+    return oldTxs;
+  }
 }
 
 export default TransactionRepository;

@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import { Rewards } from "@types";
 
 import { BlockchainService } from "@services/blockchain/blockchain.service";
+import { ApiService } from "@services/api/api.service";
 
 import TbwRepository from "./tbw.repository";
 import TrueBlockWeight, { TrueBlockWeightDTO } from "./tbw.entity";
@@ -14,7 +15,8 @@ export default class TbwService {
 
   constructor(
     private readonly bcService: BlockchainService,
-    private readonly tbwRepository: TbwRepository
+    private readonly tbwRepository: TbwRepository,
+    private readonly apiService: ApiService
   ) {}
 
   async findBetweenBlocks(from: number, to: number): Promise<TrueBlockWeight[]> {
@@ -66,5 +68,10 @@ export default class TbwService {
     const tbw = await this.calculatePayouts(from, to);
     await this.bcService.processPayoutTbw(tbw);
     return tbw;
+  }
+
+  async removeOldTbwData(): Promise<TrueBlockWeight[]> {
+    const lastBlock = await this.apiService.findLastBlock();
+    return this.tbwRepository.removeOlTbwData(lastBlock.data.height - 500000); // A little over 30 days
   }
 }
