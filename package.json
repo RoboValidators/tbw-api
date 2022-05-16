@@ -36,7 +36,7 @@
     "@nestjs/schedule": "0.4.3",
     "@nestjs/terminus": "7.2.0",
     "@types/lodash": "4.14.176",
-    "axios": "0.20.0",
+    "axios": "0.27.2",
     "axios-cache-adapter": "2.7.3",
     "bignumber.js": "9.0.1",
     "eslint-plugin-prettier": "3.4.1",
