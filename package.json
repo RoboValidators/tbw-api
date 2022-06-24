@@ -34,7 +34,7 @@
     "@nestjs/core": "7.4.4",
     "@nestjs/platform-express": "7.4.4",
     "@nestjs/schedule": "0.4.3",
-    "@nestjs/terminus": "7.2.0",
+    "@nestjs/terminus": "8.0.8",
     "@types/lodash": "4.14.176",
     "axios": "0.20.0",
     "axios-cache-adapter": "2.7.3",
